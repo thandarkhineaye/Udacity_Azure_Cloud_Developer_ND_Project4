@@ -114,6 +114,14 @@ def index():
             vote = request.form['vote']
             r.incr(vote,1)
 
+
+            vote0 = r.get(vote).decode('utf-8')
+            
+            # log current vote
+            properties = {'custom_dimensions': {'{}_vote'.format(vote): vote0}}
+            logger.info('new_{}_vote'.format(vote), extra=properties)
+
+
             # Get current values
             vote1 = r.get(button1).decode('utf-8')
             vote2 = r.get(button2).decode('utf-8')
