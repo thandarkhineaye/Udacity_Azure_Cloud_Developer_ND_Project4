@@ -38,6 +38,12 @@ tracer = Tracer(
     sampler=ProbabilitySampler(1.0),
 )
 
+# Event logger
+eventlogger = logging.getLogger(__name__)
+eventhandler = AzureEventHandler(connection_string='InstrumentationKey=03d3c628-ee31-4ec6-8f2d-0f631355e677;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/')
+eventlogger.addHandler(eventhandler)
+eventlogger.setLevel(logging.INFO)
+
 app = Flask(__name__)
 
 # Requests
@@ -133,12 +139,11 @@ def index():
             r.incr(vote,1)
 
 
-            vote0 = r.get(vote).decode('utf-8')
+            #vote0 = r.get(vote).decode('utf-8')
             
             # log current vote
-            properties = {'custom_dimensions': {'{}_vote'.format(vote): vote0}}
-            logger.info('new_{}_vote'.format(vote), extra=properties)
-
+            #properties = {'custom_dimensions': {'{}_vote'.format(vote): vote0}}
+            #logger.info('new_{}_vote'.format(vote), extra=properties)
 
             # Get current values
             vote1 = r.get(button1).decode('utf-8')
